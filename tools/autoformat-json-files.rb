@@ -18,7 +18,7 @@ Dir.glob('*.json').each do |file_path|
   next if relative_path == "quirks/apple-appIDs-to-domains-shared-credentials.json"
 
   begin
-    original_file_contents = File.read(file_path)
+    original_file_contents = File.read(file_path, encoding: "UTF-8")
     contents_as_object = JSON.parse(original_file_contents)
     if contents_as_object.is_a? Hash
       contents_as_object = contents_as_object.sort_by { |key| key }.to_h
@@ -36,7 +36,7 @@ Dir.glob('*.json').each do |file_path|
     reformatted_file_contents = JSON.pretty_generate(contents_as_object, indent: '    ') + "\n"
     if original_file_contents != reformatted_file_contents
       changed_any_or_error = true
-      File.write file_path, reformatted_file_contents
+      File.write(file_path, reformatted_file_contents, encoding: "UTF-8")
       puts("Reformatted '#{relative_path}'")
     end
   rescue => exception
